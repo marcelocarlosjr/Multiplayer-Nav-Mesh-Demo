@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using NETWORK_ENGINE;
+using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(NetworkRigidBody))]
 public class RigidBodyController : NetworkComponent
@@ -10,13 +11,14 @@ public class RigidBodyController : NetworkComponent
     public float speed = 3;
     public float rotationSpeed;
     public Vector3 LastMove;
+    public Vector2 input;
+    public float shoot;
 
     public bool vZero;
     public bool hZero;
 
     public float v;
     public float h;
-    public float fire;
     public bool shooting;
     public override void HandleMessage(string flag, string value)
     {
@@ -30,8 +32,8 @@ public class RigidBodyController : NetworkComponent
 
         if(flag == "FIRE" && IsServer)
         {
-            fire = float.Parse(value);
-            if(fire > 0)
+            shoot = float.Parse(value);
+            if(shoot > 0)
             {
                 if (!shooting)
                 {
@@ -66,7 +68,7 @@ public class RigidBodyController : NetworkComponent
         {
             if (IsLocalPlayer)
             {
-                if(Vector3.Distance(LastMove, new Vector3(h, 0, v)) > 0.1)
+                /*if(Vector3.Distance(LastMove, new Vector3(h, 0, v)) > 0.1)
                 {
                     LastMove = new Vector3(h, 0, v);
                     SendCommand("MOVE", h + "," + v);
@@ -75,7 +77,7 @@ public class RigidBodyController : NetworkComponent
                 if(fire > 0)
                 {
                     SendCommand("FIRE", fire.ToString());
-                }
+                }*/
             }
             yield return new WaitForSeconds(0.05f);
         }
@@ -91,25 +93,31 @@ public class RigidBodyController : NetworkComponent
         }
     }
 
-    
+    public void MoveInput(InputAction.CallbackContext context)
+    {
+        input = context.ReadValue<Vector2>();
+        SendCommand("MOVE", input.x + "," + input.y);
+    }
+
+    public void Shoot(InputAction.CallbackContext context)
+    {
+        shoot = context.ReadValue<float>();
+        SendCommand("FIRE", shoot.ToString());
+    }
+
     void Update()
     {
         if (IsServer)
         {
-            if(LastMove.z > 0.001 || LastMove.z < -0.001)
-            {
-                MyRig.velocity = this.transform.forward * LastMove.z * speed;
-            }
-            if(LastMove.x != 0)
-            {
-                MyRig.angularVelocity = new Vector3(0, LastMove.x * rotationSpeed, 0);
-            }
+            MyRig.velocity = this.transform.forward * LastMove.z * speed;
+
+            MyRig.angularVelocity = new Vector3(0, LastMove.x * rotationSpeed, 0);
         }
         if (IsClient)
         {
-            h = Input.GetAxis("Horizontal");
-            v = Input.GetAxis("Vertical");
-            fire = Input.GetAxis("Fire1");
+            //h = Input.GetAxis("Horizontal");
+            //v = Input.GetAxis("Vertical");
+            //fire = Input.GetAxis("Fire1");
         }
     }
 }

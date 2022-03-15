@@ -133,7 +133,7 @@ MonoBehaviour:
   MyCore: {fileID: 0}
   MyId: {fileID: 0}
   IsDirty: 0
-  speed: 7
+  speed: 15
   MyRig: {fileID: 0}
 --- !u!54 &5334561470896852671
 Rigidbody:
