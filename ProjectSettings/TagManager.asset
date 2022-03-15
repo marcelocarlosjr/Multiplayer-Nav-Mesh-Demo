@@ -8,6 +8,9 @@ TagManager:
   - p1
   - p2
   - p3
+  - Bullet
+  - Enemy
+  - WALL
   layers:
   - Default
   - TransparentFX

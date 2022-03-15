@@ -16,6 +16,8 @@ public class RigidBodyController : NetworkComponent
 
     public float v;
     public float h;
+    public float fire;
+    public bool shooting;
     public override void HandleMessage(string flag, string value)
     {
         if(flag == "MOVE" && IsServer)
@@ -25,8 +27,27 @@ public class RigidBodyController : NetworkComponent
             float v = float.Parse(args[1]);
             LastMove = new Vector3(h, 0, v);
         }
+
+        if(flag == "FIRE" && IsServer)
+        {
+            fire = float.Parse(value);
+            if(fire > 0)
+            {
+                if (!shooting)
+                {
+                    StartCoroutine(Fire());
+                }
+            }
+        }
     }
 
+    public IEnumerator Fire()
+    {
+        shooting = true;
+        MyCore.NetCreateObject(3, this.Owner, this.transform.position, this.transform.rotation);
+        yield return new WaitForSeconds(1f);
+        shooting = false;
+    }
     public override void NetworkedStart()
     {
         if (IsServer)
@@ -45,14 +66,15 @@ public class RigidBodyController : NetworkComponent
         {
             if (IsLocalPlayer)
             {
-                if (new Vector3(v, 0, h).magnitude > 0.001f)
+                if(Vector3.Distance(LastMove, new Vector3(h, 0, v)) > 0.1)
                 {
                     LastMove = new Vector3(h, 0, v);
                     SendCommand("MOVE", h + "," + v);
                 }
-                else if(LastMove.magnitude == 0)
+
+                if(fire > 0)
                 {
-                    SendCommand("MOVE", 0 + "," + 0);
+                    SendCommand("FIRE", fire.ToString());
                 }
             }
             yield return new WaitForSeconds(0.05f);
@@ -87,6 +109,7 @@ public class RigidBodyController : NetworkComponent
         {
             h = Input.GetAxis("Horizontal");
             v = Input.GetAxis("Vertical");
+            fire = Input.GetAxis("Fire1");
         }
     }
 }

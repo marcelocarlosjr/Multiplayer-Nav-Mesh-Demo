@@ -7,6 +7,8 @@ using UnityEngine.AI;
 [RequireComponent(typeof(NavMeshAgent))]
 public class NavMeshController : NetworkComponent
 {
+    public int HP = 3;
+
     public Vector3 Goal1;
     public Vector3 Goal2;
 
@@ -14,7 +16,12 @@ public class NavMeshController : NetworkComponent
 
     NavMeshAgent MyAgent;
     public override void HandleMessage(string flag, string value)
-    {    }
+    {    
+        if(flag == "HP" && IsClient)
+        {
+            HP = int.Parse(value);
+        }
+    }
 
     public override void NetworkedStart()
     {    }
@@ -31,6 +38,11 @@ public class NavMeshController : NetworkComponent
 
         while (IsServer)
         {
+            if(HP <= 0)
+            {
+                MyCore.NetDestroyObject(this.NetId);
+            }
+
             foreach (RigidBodyController player in FindObjectsOfType<RigidBodyController>())
             {
                 if (Vector3.Distance(player.transform.position, transform.position) <= 2.5f)
@@ -64,9 +76,19 @@ public class NavMeshController : NetworkComponent
 
             if (IsDirty)
             {
+                SendUpdate("HP", HP.ToString());
                 IsDirty = false;
             }
             yield return new WaitForSeconds(0.5f);
+        }
+    }
+
+    public void TakeDamage(int dmg)
+    {
+        if (IsServer)
+        {
+            HP -= dmg;
+            SendUpdate("HP", HP.ToString());
         }
     }
 
@@ -79,9 +101,14 @@ public class NavMeshController : NetworkComponent
         }
     }
 
-
-    void Update()
+    private void OnTriggerEnter(Collider other)
     {
-        
+        if (IsServer)
+        {
+            if(other.tag == "Bullet")
+            {
+                TakeDamage(1);
+            }
+        }
     }
 }

@@ -18,7 +18,7 @@ GameObject:
   - component: {fileID: 1842907355}
   m_Layer: 0
   m_Name: SmoothActor
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -162,7 +162,7 @@ MonoBehaviour:
   MinThreshold: 0.1
   MaxThreshold: 0.5
   Smooth: 1
-  NavMeshSpeed: 1.5
+  NavMeshSpeed: 3.5
   RotationSpeed: 2.0944
 --- !u!114 &1842907355
 MonoBehaviour:
@@ -179,6 +179,7 @@ MonoBehaviour:
   MyCore: {fileID: 0}
   MyId: {fileID: 0}
   IsDirty: 0
+  HP: 3
   Goal1: {x: 0, y: 0, z: 0}
   Goal2: {x: 0, y: 0, z: 0}
   goal: 0
