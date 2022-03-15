@@ -111,7 +111,6 @@ GameObject:
   - component: {fileID: 5348485880337217324}
   - component: {fileID: 2108321538}
   - component: {fileID: 2108321539}
-  - component: {fileID: 2108321540}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -127,7 +126,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6066401558198984483}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.4684755, y: 1.2424228, z: -1.4466403}
+  m_LocalPosition: {x: 1.4684755, y: 2.23, z: -1.4466403}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 7421474710785490286}
@@ -207,10 +206,10 @@ Rigidbody:
   m_Mass: 1
   m_Drag: 0
   m_AngularDrag: 0.05
-  m_UseGravity: 0
+  m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 80
   m_CollisionDetection: 0
 --- !u!114 &5348485880337217324
 MonoBehaviour:
@@ -271,27 +270,10 @@ MonoBehaviour:
   MyId: {fileID: 0}
   IsDirty: 0
   MyRig: {fileID: 0}
---- !u!114 &2108321540
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6066401558198984483}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7e8b1ed0d78eeae429a0efd65d8be527, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  MyCore: {fileID: 0}
-  MyId: {fileID: 0}
-  IsDirty: 0
-  LastPosition: {x: 0, y: 0, z: 0}
-  LastRotation: {x: 0, y: 0, z: 0}
-  LastVelocity: {x: 0, y: 0, z: 0}
-  LastAngular: {x: 0, y: 0, z: 0}
-  OffsetVelocity: {x: 0, y: 0, z: 0}
-  Threshold: 0.1
-  EThreshold: 2.5
-  MyRig: {fileID: 0}
-  UseOffsetVelocity: 1
+  speed: 2
+  rotationSpeed: 2
+  LastMove: {x: 0, y: 0, z: 0}
+  vZero: 0
+  hZero: 0
+  v: 0
+  h: 0
