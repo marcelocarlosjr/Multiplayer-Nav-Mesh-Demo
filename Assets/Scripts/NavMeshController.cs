@@ -7,40 +7,66 @@ using UnityEngine.AI;
 [RequireComponent(typeof(NavMeshAgent))]
 public class NavMeshController : NetworkComponent
 {
-    public Vector3 Goal;
+    public Vector3 Goal1;
+    public Vector3 Goal2;
+
+    public bool goal;
+
     NavMeshAgent MyAgent;
     public override void HandleMessage(string flag, string value)
-    {
-        
-    }
+    {    }
 
     public override void NetworkedStart()
-    {
-        
-    }
+    {    }
 
     public override IEnumerator SlowUpdate()
     {
         if (IsClient)
-        {   }
+        {    }
         if (IsServer)
         {
-            MyAgent.SetDestination(Goal);
-            if (IsDirty)
-            {
-
-                IsDirty = false;
-            }
+            goal = true;
+            MyAgent.SetDestination(Goal2);
         }
 
         while (IsServer)
         {
-            if (MyAgent.remainingDistance < .1f)
+            foreach (RigidBodyController player in FindObjectsOfType<RigidBodyController>())
             {
-                Goal = new Vector3(Goal.x * -1, Goal.y, Goal.z);
-                MyAgent.SetDestination(Goal);
+                if (Vector3.Distance(player.transform.position, transform.position) <= 2.5f)
+                {
+                    MyAgent.SetDestination(player.transform.position);
+                }
+                else
+                {
+                    if (!goal)
+                    {
+                        MyAgent.SetDestination(Goal1);
+                    }
+                    if (goal)
+                    {
+                        MyAgent.SetDestination(Goal2);
+                    }
+                    if (MyAgent.remainingDistance < .1f)
+                    {
+                        goal = !goal;
+                        if (!goal)
+                        {
+                            MyAgent.SetDestination(Goal1);
+                        }
+                        if (goal)
+                        {
+                            MyAgent.SetDestination(Goal2);
+                        }
+                    }
+                }
             }
-            yield return new WaitForSeconds(0.1f);
+
+            if (IsDirty)
+            {
+                IsDirty = false;
+            }
+            yield return new WaitForSeconds(0.5f);
         }
     }
 

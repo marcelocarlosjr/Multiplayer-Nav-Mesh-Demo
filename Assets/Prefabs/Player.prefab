@@ -113,7 +113,7 @@ GameObject:
   - component: {fileID: 2108321539}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -189,7 +189,7 @@ SphereCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6066401558198984483}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 4c1588af0fb93bd4f942f01a1bd08cc1, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
@@ -271,7 +271,7 @@ MonoBehaviour:
   IsDirty: 0
   MyRig: {fileID: 0}
   speed: 2
-  rotationSpeed: 2
+  rotationSpeed: 1.5
   LastMove: {x: 0, y: 0, z: 0}
   vZero: 0
   hZero: 0

@@ -15,10 +15,7 @@ public class RigidBodyController : NetworkComponent
     public bool hZero;
 
     public float v;
-
     public float h;
-
-
     public override void HandleMessage(string flag, string value)
     {
         if(flag == "MOVE" && IsServer)
@@ -34,7 +31,11 @@ public class RigidBodyController : NetworkComponent
     {
         if (IsServer)
         {
-            this.transform.position = new Vector3(0, 1.1f, -3);
+            this.transform.position = GameObject.FindGameObjectWithTag("p" + this.Owner).GetComponent<Transform>().position;
+        }
+        if (IsLocalPlayer)
+        {
+            FindObjectOfType<Camera>().GetComponent<CameraController>().SetLocal(this.transform);
         }
     }
 
@@ -44,7 +45,7 @@ public class RigidBodyController : NetworkComponent
         {
             if (IsLocalPlayer)
             {
-                if (new Vector3(v, 0, h).magnitude > 0.1f)
+                if (new Vector3(v, 0, h).magnitude > 0.001f)
                 {
                     LastMove = new Vector3(h, 0, v);
                     SendCommand("MOVE", h + "," + v);
@@ -73,7 +74,7 @@ public class RigidBodyController : NetworkComponent
     {
         if (IsServer)
         {
-            if(LastMove.z > 0.1 || LastMove.z < -0.1)
+            if(LastMove.z > 0.001 || LastMove.z < -0.001)
             {
                 MyRig.velocity = this.transform.forward * LastMove.z * speed;
             }
